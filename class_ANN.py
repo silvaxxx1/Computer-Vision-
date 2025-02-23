@@ -1,3 +1,41 @@
+# This code implements a simple feedforward neural network with custom activation functions and L2 regularization.
+# The key components are:
+
+# 1. **Activation Class**: An abstract base class for activation functions with two static methods:
+#    - `function(x)`: Computes the activation value for the input `x`.
+#    - `derivative(x)`: Computes the derivative of the activation function at `x`.
+
+# 2. **SafeSigmoid Class**: A subclass of the `Activation` class implementing the Sigmoid activation function:
+#    - The `function(x)` method safely computes the Sigmoid by clipping the input values to avoid overflow.
+#    - The `derivative(x)` method computes the Sigmoid derivative, also ensuring safe output with a small epsilon.
+
+# 3. **ClippedReLU Class**: A subclass of the `Activation` class implementing the ReLU (Rectified Linear Unit) activation function:
+#    - The `function(x)` method clips the output to the range [0, 20].
+#    - The `derivative(x)` method computes the ReLU derivative, returning 1 for positive values and 0 for others, with clipping at the defined bounds.
+
+# 4. **Layer Class**: Represents a layer in the neural network, with methods for:
+#    - `initialize_parameters()`: Initializes weights (`W`) and biases (`b`) using He or Xavier initialization depending on the chosen method.
+#    - `forward(X)`: Computes the forward pass through the layer (input to output).
+#    - `backward(grad, prev_a, learning_rate)`: Performs the backward pass (gradient computation and weight update), using gradient clipping and L2 regularization.
+
+# 5. **NeuralNetwork Class**: Represents the entire neural network with methods for:
+#    - `add(layer)`: Adds a layer to the network.
+#    - `compile()`: Initializes the parameters of each layer based on the input dimensions.
+#    - `forward(X)`: Propagates the input `X` through all layers.
+#    - `backward(X, y, learning_rate)`: Performs the backpropagation algorithm to update the weights and biases.
+#    - `train(X, y, epochs, learning_rate, verbose)`: Trains the network using the provided data `X` and labels `y` for a specified number of epochs with gradient updates.
+#    - `plot_loss()`: Plots the training loss over time.
+#    - `predict(X)`: Predicts the output for input data `X` after training, using a threshold of 0.5 for binary classification.
+
+# The neural network can be trained on a small dataset `X` with corresponding binary labels `y`, and the loss is tracked over epochs.
+# After training, predictions can be made using the trained model.
+
+# Example usage:
+# A small dataset `X` and labels `y` are defined. The network is built with a Layer having 4 units and ClippedReLU activation,
+# followed by a Layer with 1 unit and SafeSigmoid activation.
+# The network is trained for 10000 epochs, and the training loss is plotted. Predictions are made on new test data.
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
